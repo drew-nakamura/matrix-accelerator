@@ -1,0 +1,102 @@
+`timescale 1ns / 1ps
+//============================================================
+// Module: MCU Wrapper
+// Author: Drew Nakamura
+// Project: 5_Stage_Pipeline
+//
+// Description:
+//   Wrapper for the 5-stage pipeline CPU and memory-mapped I/O.
+//   Connects the CPU to switches, LEDs, and the 7-segment display.
+//============================================================
+
+
+module MCU_WRAPPER(
+   input logic CLK,
+   input logic BTNC,
+   input logic [3:0] BTNS,
+   input logic [15:0] SWITCHES,
+   output logic [15:0] LEDS,
+   output logic [7:0] CATHODES,
+   output logic [3:0] ANODES
+   );
+    logic clk_50; //50 MHz clock
+    // MMIO map lives in Interconnect: switches 11000000, LEDs 11000020,
+    // seven-seg 11000040, buttons 11000080.
+    //=====MEMORY WIRES / CPU Wires=====
+    logic [2:0] mem_data;
+    logic [31:0] IOBUS_out, IOBUS_in, IOBUS_addr;
+    logic s_reset, IOBUS_RDEN, IOBUS_WE;
+   
+   // Registers for buffering outputs  /////////////////////////////////////
+    logic [15:0] r_SSEG;
+    //=====DMEM WIRES======
+    logic DMEM_RDEN, DMEM_WE;
+    logic [31:0] DMEM_DATA;
+    //====BOARD WIRES=====
+    logic SSEG_WE, LEDS_WE;
+    // CPU drives this. The board wrapper does not use it.
+    logic unused_halt_sig;
+
+   CPU_TOP CPU_TOP(
+        .RST(s_reset),
+        .CLK(clk_50),
+        .DATA_IN(IOBUS_in),
+        .mem_data(mem_data),
+        .DATA_ADDRESS(IOBUS_addr),
+        .DATA_OUT(IOBUS_out),
+        .IOBUS_RDEN(IOBUS_RDEN),
+        .IOBUS_WE(IOBUS_WE),
+        .halt_sig(unused_halt_sig)
+    );
+
+   Interconnect Interconnect(
+        .CLK(clk_50),
+        .address(IOBUS_addr),
+        .WE(IOBUS_WE),
+        .RDEN(IOBUS_RDEN),
+        .DMEM_DATA(DMEM_DATA),
+        .SWITCHES({16'b0,SWITCHES}),
+        .BUTTONS({28'b0, BTNS}),
+        .DMEM_RDEN(DMEM_RDEN),
+        .DMEM_WE(DMEM_WE),
+        .LEDS_WE(LEDS_WE),
+        .SSEG_WE(SSEG_WE),
+        .IOBUS_in(IOBUS_in)
+   );
+
+   DMEM DATA_MEMORY(
+        .CLK(CLK),
+        .WE(DMEM_WE),
+        .RDEN(DMEM_RDEN),
+        .address(IOBUS_addr),
+        .data_in(IOBUS_out),
+        .mem_data(mem_data), //Meta data for half, byte, and word
+        .data_out(DMEM_DATA)
+    );
+
+   // Declare Seven Segment Display /////////////////////////////////////////
+   SevSegDisp SSG_DISP (
+       .DATA_IN(r_SSEG),
+       .CLK(CLK),
+       .s_reset(s_reset),
+       .MODE(1'b1),
+       .CATHODES(CATHODES),
+       .ANODES(ANODES)
+   );
+                            
+   // Clock Divider to create 50 MHz Clock //////////////////////////////////
+   always_ff @(posedge CLK) begin
+        if(BTNC) clk_50 <= 1'b0;
+        else clk_50 <= ~clk_50;
+
+   end
+   always_ff @(negedge clk_50) s_reset <= BTNC;
+   // Connect Signals ///////////////////////////////////////////////////////
+
+   always_ff @ (posedge clk_50) begin
+      
+        if(LEDS_WE) LEDS   <= IOBUS_out[15:0];
+        if(SSEG_WE) r_SSEG <= IOBUS_out[15:0];
+    end
+
+   endmodule

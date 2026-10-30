@@ -1,0 +1,153 @@
+
+build/haz_alu.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text.init:
+
+00000000 <_start>:
+   0:	00200193          	li	gp,2
+   4:	00100093          	li	ra,1
+   8:	00200093          	li	ra,2
+   c:	000086b3          	add	a3,ra,zero
+  10:	00200393          	li	t2,2
+  14:	18769663          	bne	a3,t2,1a0 <fail>
+
+00000018 <test_3>:
+  18:	00300193          	li	gp,3
+  1c:	00100093          	li	ra,1
+  20:	00200093          	li	ra,2
+  24:	001006b3          	add	a3,zero,ra
+  28:	00200393          	li	t2,2
+  2c:	16769a63          	bne	a3,t2,1a0 <fail>
+
+00000030 <test_4>:
+  30:	00400193          	li	gp,4
+  34:	00100093          	li	ra,1
+  38:	00200093          	li	ra,2
+  3c:	00000013          	nop
+  40:	000086b3          	add	a3,ra,zero
+  44:	00200393          	li	t2,2
+  48:	14769c63          	bne	a3,t2,1a0 <fail>
+
+0000004c <test_5>:
+  4c:	00500193          	li	gp,5
+  50:	01000093          	li	ra,16
+  54:	02000113          	li	sp,32
+  58:	401106b3          	sub	a3,sp,ra
+  5c:	01000393          	li	t2,16
+  60:	14769063          	bne	a3,t2,1a0 <fail>
+
+00000064 <test_6>:
+  64:	00600193          	li	gp,6
+  68:	02000113          	li	sp,32
+  6c:	01000093          	li	ra,16
+  70:	401106b3          	sub	a3,sp,ra
+  74:	01000393          	li	t2,16
+  78:	12769463          	bne	a3,t2,1a0 <fail>
+
+0000007c <test_7>:
+  7c:	00700193          	li	gp,7
+  80:	00100093          	li	ra,1
+  84:	001080b3          	add	ra,ra,ra
+  88:	001080b3          	add	ra,ra,ra
+  8c:	001080b3          	add	ra,ra,ra
+  90:	001080b3          	add	ra,ra,ra
+  94:	001080b3          	add	ra,ra,ra
+  98:	00008693          	mv	a3,ra
+  9c:	02000393          	li	t2,32
+  a0:	10769063          	bne	a3,t2,1a0 <fail>
+
+000000a4 <test_8>:
+  a4:	00800193          	li	gp,8
+  a8:	00700093          	li	ra,7
+  ac:	00508013          	addi	zero,ra,5
+  b0:	001006b3          	add	a3,zero,ra
+  b4:	00700393          	li	t2,7
+  b8:	0e769463          	bne	a3,t2,1a0 <fail>
+
+000000bc <test_9>:
+  bc:	00900193          	li	gp,9
+  c0:	00700093          	li	ra,7
+  c4:	00508013          	addi	zero,ra,5
+  c8:	000086b3          	add	a3,ra,zero
+  cc:	00700393          	li	t2,7
+  d0:	0c769863          	bne	a3,t2,1a0 <fail>
+
+000000d4 <test_10>:
+  d4:	00a00193          	li	gp,10
+  d8:	00700093          	li	ra,7
+  dc:	00508013          	addi	zero,ra,5
+  e0:	00000013          	nop
+  e4:	001006b3          	add	a3,zero,ra
+  e8:	00700393          	li	t2,7
+  ec:	0a769a63          	bne	a3,t2,1a0 <fail>
+
+000000f0 <test_11>:
+  f0:	00b00193          	li	gp,11
+  f4:	00700093          	li	ra,7
+  f8:	00508013          	addi	zero,ra,5
+  fc:	00000013          	nop
+ 100:	000086b3          	add	a3,ra,zero
+ 104:	00700393          	li	t2,7
+ 108:	08769c63          	bne	a3,t2,1a0 <fail>
+
+0000010c <test_12>:
+ 10c:	00c00193          	li	gp,12
+ 110:	00700093          	li	ra,7
+ 114:	12345037          	lui	zero,0x12345
+ 118:	000086b3          	add	a3,ra,zero
+ 11c:	00700393          	li	t2,7
+ 120:	08769063          	bne	a3,t2,1a0 <fail>
+
+00000124 <test_13>:
+ 124:	00d00193          	li	gp,13
+ 128:	123450b7          	lui	ra,0x12345
+ 12c:	67808693          	addi	a3,ra,1656 # 12345678 <_end+0x12341698>
+ 130:	123453b7          	lui	t2,0x12345
+ 134:	67838393          	addi	t2,t2,1656 # 12345678 <_end+0x12341698>
+ 138:	06769463          	bne	a3,t2,1a0 <fail>
+
+0000013c <test_14>:
+ 13c:	00e00193          	li	gp,14
+ 140:	00000117          	auipc	sp,0x0
+ 144:	00810113          	addi	sp,sp,8 # 148 <test_14+0xc>
+ 148:	00000097          	auipc	ra,0x0
+ 14c:	402086b3          	sub	a3,ra,sp
+ 150:	00000393          	li	t2,0
+ 154:	04769663          	bne	a3,t2,1a0 <fail>
+ 158:	00f00193          	li	gp,15
+ 15c:	00000093          	li	ra,0
+ 160:	00100113          	li	sp,1
+ 164:	00000013          	nop
+ 168:	00000013          	nop
+ 16c:	00000013          	nop
+ 170:	00500093          	li	ra,5
+ 174:	00500113          	li	sp,5
+ 178:	02209463          	bne	ra,sp,1a0 <fail>
+
+0000017c <test_16>:
+ 17c:	01000193          	li	gp,16
+ 180:	00004317          	auipc	t1,0x4
+ 184:	e5030313          	addi	t1,t1,-432 # 3fd0 <begin_signature>
+ 188:	05a00293          	li	t0,90
+ 18c:	00532023          	sw	t0,0(t1)
+ 190:	00032683          	lw	a3,0(t1)
+ 194:	05a00393          	li	t2,90
+ 198:	00769463          	bne	a3,t2,1a0 <fail>
+ 19c:	00301e63          	bne	zero,gp,1b8 <pass>
+
+000001a0 <fail>:
+ 1a0:	00119193          	slli	gp,gp,0x1
+ 1a4:	0011e193          	ori	gp,gp,1
+ 1a8:	00004f17          	auipc	t5,0x4
+ 1ac:	dd8f0f13          	addi	t5,t5,-552 # 3f80 <tohost>
+ 1b0:	003f2023          	sw	gp,0(t5)
+ 1b4:	0000006f          	j	1b4 <fail+0x14>
+
+000001b8 <pass>:
+ 1b8:	00100193          	li	gp,1
+ 1bc:	00004f17          	auipc	t5,0x4
+ 1c0:	dc4f0f13          	addi	t5,t5,-572 # 3f80 <tohost>
+ 1c4:	003f2023          	sw	gp,0(t5)
+ 1c8:	0000006f          	j	1c8 <pass+0x10>
+ 1cc:	c0001073          	unimp

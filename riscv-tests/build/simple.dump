@@ -1,0 +1,13 @@
+
+build/simple.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text.init:
+
+00000000 <_start>:
+   0:	00100193          	li	gp,1
+   4:	00004f17          	auipc	t5,0x4
+   8:	f7cf0f13          	addi	t5,t5,-132 # 3f80 <tohost>
+   c:	003f2023          	sw	gp,0(t5)
+  10:	0000006f          	j	10 <_start+0x10>
+  14:	c0001073          	unimp

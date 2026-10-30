@@ -1,0 +1,10 @@
+5_Stage_Pipeline_FPGA_Vivado/
+
+# Xcelium outputs (make / make clean)
+xcelium.d/
+waves.shm/
+xrun.history
+xrun.log
+logs/
+/imem.mem
+/dmem.mem
